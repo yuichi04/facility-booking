@@ -1,9 +1,15 @@
-[submodule "facility-booking-frontend"]
-	path = facility-booking-frontend
+[submodule "frontend"]
+	path = services/facility-booking-frontend
 	url = git@github.com:yuichi04/facility-booking-frontend.git
-[submodule "facility-booking-admin-frontend"]
-	path = facility-booking-admin-frontend
+[submodule "admin-frontend"]
+	path = services/facility-booking-admin-frontend
 	url = git@github.com:yuichi04/facility-booking-admin-frontend.git
-[submodule "facility-booking-auth-api"]
-    path = facility-booking-auth-api
+[submodule "auth-api"]
+    path = services/facility-booking-auth-api
     url = git@github.com:yuichi04/facility-booking-auth-api.git
+[submodule "facilities-api"]
+    path = services/facility-booking-facilities-api
+    url = git@github.com:yuichi04/facility-booking-facilities-api.git
+[submodule "bookings-api"]
+    path = services/facility-booking-bookings-api
+    url = git@github.com:yuichi04/facility-booking-bookings-api.git
