@@ -1,0 +1,3 @@
+[submodule "facility-booking-system-frontend"]
+	path = facility-booking-system-frontend
+	url = https://github.com/yuichi04/facility-booking-system-frontend.git
