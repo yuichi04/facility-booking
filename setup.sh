@@ -40,7 +40,7 @@ echo "✨ Setup completed successfully!"
 echo "
 🌐 Available services:
     - Frontend: http://localhost:3000
-    - FrontendAdmin: http://localhost:3001
+    - AdminFrontend: http://localhost:3001
     - AuthApi: http://localhost:8080
     - BookingsApi: http://localhost:8081
     - FacilitiesApi: http://localhost:8082

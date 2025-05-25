@@ -11,7 +11,7 @@ services:
       - facility-booking
     volumes:
       - ./services/facility-booking-frontend:/frontend
-  frontend-admin:
+  admin-frontend:
     build: ./services/facility-booking-admin-frontend
     environment:
       - AUTH_API_URL=${AUTH_API_URL}
@@ -41,7 +41,7 @@ services:
       timeout: 5s
       retries: 5
   pgadmin:
-    image: dpage/pgadmin4:8.14
+    image: dpage/pgadmin4:9.3
     environment:
       - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
       - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
