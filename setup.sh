@@ -44,4 +44,5 @@ echo "
     - AuthApi: http://localhost:8080
     - BookingsApi: http://localhost:8081
     - FacilitiesApi: http://localhost:8082
+    - PgAdmin: http://localhost:5050
 "
