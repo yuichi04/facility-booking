@@ -5,11 +5,8 @@ set -e
 
 echo "🚀 Starting development environment setup..."
 
-# .envファイルの存在確認と作成
-if [ ! -f .env ]; then
-    echo "⚠️ .env file not found. Creating from .env.local..."
-    cp .env.local .env || { echo "❌ Error: Could not create .env file"; exit 1; }
-fi
+# .env.localファイルをコピーして.envファイルを作成
+cp .env.local .env || { echo "❌ Error: Could not create .env file"; exit 1; }
 
 # 環境変数を読み込む
 source .env
@@ -28,8 +25,8 @@ git submodule foreach 'git checkout main && git pull origin main'
 
 # フロントエンドの依存関係をインストール
 echo "📚 Installing frontend dependencies..."
-cd facility-booking-frontend && npm install && cd ..
-cd facility-booking-admin-frontend && npm install && cd ..
+cd services/facility-booking-frontend && npm install && cd ..
+cd facility-booking-admin-frontend && npm install && cd ../..
 
 # Dockerコンテナのビルドと起動
 echo "🏗️ Building and starting Docker containers..."

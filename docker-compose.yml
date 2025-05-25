@@ -1,43 +1,64 @@
 services:
   frontend:
-    build: ./frontend
+    build: ./services/facility-booking-frontend
     environment:
       - AUTH_API_URL=${AUTH_API_URL}
       - BOOKINGS_API_URL=${BOOKINGS_API_URL}
       - FACILITIES_API_URL=${FACILITIES_API_URL}
     ports:
-      - "3000:3000"
+      - "${FRONTEND_PORT}:3000"
     networks:
       - facility-booking
     volumes:
-      - ./facility-booking-frontend:/frontend
-#   frontend-admin:
-#     build: ./frontend-admin
-#     environment:
-#       - AUTH_API_URL=${AUTH_API_URL}
-#       - BOOKINGS_API_URL=${BOOKINGS_API_URL}
-#       - FACILITIES_API_URL=${FACILITIES_API_URL}
-#     ports:
-#       - "3001:3001"
-#     networks:
-#       - facility-booking
-#     volumes:
-#       - ./facility-booking-admin-frontend:/frontend-admin
-#   auth-api:
-#     build: ./auth-api
-#     environment:
-#       - POSTGRES_USER=${POSTGRES_USER}
-#       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-#       - POSTGRES_HOST=${POSTGRES_HOST}
-#       - POSTGRES_PORT=${POSTGRES_PORT}
-#       - POSTGRES_DB_NAME=${POSTGRES_DB_NAME}
-#       - FRONTEND_URL=${NEXT_PUBLIC_FRONTEND_URL}
-#       - ADMIN_FRONTEND_URL=${NEXT_PUBLIC_ADMIN_FRONTEND_URL}
-#     ports:
-#       - "8080:8080"
-#     networks:
-#       - facility-booking
-#     volumes:
-#       - ./facility-booking-auth-api:/auth-api
+      - ./services/facility-booking-frontend:/frontend
+  frontend-admin:
+    build: ./services/facility-booking-admin-frontend
+    environment:
+      - AUTH_API_URL=${AUTH_API_URL}
+      - BOOKINGS_API_URL=${BOOKINGS_API_URL}
+      - FACILITIES_API_URL=${FACILITIES_API_URL}
+    ports:
+      - "${ADMIN_FRONTEND_PORT}:3001"
+    networks:
+      - facility-booking
+    volumes:
+      - ./services/facility-booking-admin-frontend:/admin-frontend
+  db:
+    image: postgres:14.15
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB_NAME=${POSTGRES_DB_NAME}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "${DB_PORT}:5432"
+    networks:
+      - facility-booking
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  pgadmin:
+    image: dpage/pgadmin4:8.14
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+      - PGADMIN_CONFIG_SERVER_MODE=False
+      - PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED=False
+    ports:
+      - "${PGADMIN_PORT}:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+      - ./config/pgadmin/facility-booking-servers.json:/pgadmin4/facility-booking-servers.json
+    networks:
+      - facility-booking
+    depends_on:
+      db:
+        condition: service_healthy
 networks:
   facility-booking:
+volumes:
+  postgres-data:
+  pgadmin-data:

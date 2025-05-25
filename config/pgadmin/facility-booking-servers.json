@@ -1,0 +1,12 @@
+{
+  "Facility-booking-servers": {
+    "1": {
+      "Name": "facility-booking",
+      "Group": "Facility-booking-servers",
+      "Port": 5432,
+      "MaintenanceDB": "postgres",
+      "Username": "user123",
+      "SSLMode": "prefer"
+    }
+  }
+}
