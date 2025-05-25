@@ -1,0 +1,43 @@
+services:
+  frontend:
+    build: ./frontend
+    environment:
+      - AUTH_API_URL=${AUTH_API_URL}
+      - BOOKINGS_API_URL=${BOOKINGS_API_URL}
+      - FACILITIES_API_URL=${FACILITIES_API_URL}
+    ports:
+      - "3000:3000"
+    networks:
+      - facility-booking
+    volumes:
+      - ./facility-booking-frontend:/frontend
+#   frontend-admin:
+#     build: ./frontend-admin
+#     environment:
+#       - AUTH_API_URL=${AUTH_API_URL}
+#       - BOOKINGS_API_URL=${BOOKINGS_API_URL}
+#       - FACILITIES_API_URL=${FACILITIES_API_URL}
+#     ports:
+#       - "3001:3001"
+#     networks:
+#       - facility-booking
+#     volumes:
+#       - ./facility-booking-admin-frontend:/frontend-admin
+#   auth-api:
+#     build: ./auth-api
+#     environment:
+#       - POSTGRES_USER=${POSTGRES_USER}
+#       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+#       - POSTGRES_HOST=${POSTGRES_HOST}
+#       - POSTGRES_PORT=${POSTGRES_PORT}
+#       - POSTGRES_DB_NAME=${POSTGRES_DB_NAME}
+#       - FRONTEND_URL=${NEXT_PUBLIC_FRONTEND_URL}
+#       - ADMIN_FRONTEND_URL=${NEXT_PUBLIC_ADMIN_FRONTEND_URL}
+#     ports:
+#       - "8080:8080"
+#     networks:
+#       - facility-booking
+#     volumes:
+#       - ./facility-booking-auth-api:/auth-api
+networks:
+  facility-booking:

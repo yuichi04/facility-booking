@@ -13,3 +13,6 @@
 [submodule "bookings-api"]
     path = services/facility-booking-bookings-api
     url = git@github.com:yuichi04/facility-booking-bookings-api.git
+[submodule "e2e-tests"]
+    path = e2e-tests
+    url = git@github.com:yuichi04/facility-booking-e2e-tests.git
