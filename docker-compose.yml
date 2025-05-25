@@ -23,20 +23,31 @@ services:
       - facility-booking
     volumes:
       - ./services/facility-booking-admin-frontend:/admin-frontend
+  auth-api:
+    build: ./services/facility-booking-auth-api
+    ports:
+      - "${AUTH_API_PORT}:8080"
+    networks:
+      - facility-booking
+    volumes:
+      - ./services/facility-booking-auth-api:/auth-api
+    depends_on:
+      db:
+        condition: service_healthy
   db:
     image: postgres:14.15
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-      - POSTGRES_DB_NAME=${POSTGRES_DB_NAME}
+      - POSTGRES_NAME=${POSTGRES_DB}
     volumes:
       - postgres-data:/var/lib/postgresql/data
     ports:
-      - "${DB_PORT}:5432"
+      - "${POSTGRES_PORT}:5432"
     networks:
       - facility-booking
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_DB_NAME}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5
