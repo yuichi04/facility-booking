@@ -33,7 +33,23 @@ echo "🏗️ Building and starting Docker containers..."
 docker compose up -d
 
 # データベースの準備ができるまで待機
+echo "⏳ Waiting for database to be ready..."
+timeout=60
+elapsed=0
+until docker compose exec db pg_isready -U postgres; do
+    if [ "$elapsed" -ge "$timeout"]; then
+        echo "❌ Timeout waiting for database"
+        exit 1
+    fi
+    echo "Database is unavailable - sleeping"
+    sleep 1
+    elapsed=$((elapsed+1))
+done
+echo "✅ Database is ready!"
+
 # マイグレーションの実行
+echo "🔄 Running database migrations..."
+docker compose exec auth-api go run migrate/migrate.go
 
 # セットアップ完了
 echo "✨ Setup completed successfully!"

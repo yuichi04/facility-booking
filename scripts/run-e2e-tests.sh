@@ -5,8 +5,8 @@ echo "🎭 Starting E2E Tests with Playwright..."
 # 全サービスを起動
 echo "🚀 Starting all services..."
 # 既に起動している場合は停止してから起動
-docker-compose down -v 2>/dev/null || true
-docker-compose up -d
+docker compose down -v 2>/dev/null || true
+docker compose up -d
 
 # サービスの起動を待機
 echo "⏳ Waiting for services to start..."
@@ -35,4 +35,4 @@ fi
 # 環境のクリーンアップ
 echo "🧹 Cleaning up environment..."
 cd ..
-docker-compose down
+docker compose down

@@ -1,8 +1,9 @@
 {
-  "Facility-booking-servers": {
+  "Servers": {
     "1": {
       "Name": "facility-booking",
-      "Group": "Facility-booking-servers",
+      "Group": "Servers",
+      "Host": "db",
       "Port": 5432,
       "MaintenanceDB": "postgres",
       "Username": "user123",
