@@ -19,9 +19,34 @@ docker compose down -v 2>/dev/null || true
 echo "📦 Initializing and updating submodules..."
 git submodule update --init --recursive
 
+# SSHエージェントを起動し、鍵を追加（パスフレーズ入力の入力は1回で済むように）
+if [ -f ~/.ssh/id_ed25519 ]; then
+    eval "$(ssh-agent -s)" > /dev/null
+    ssh-add ~/.ssh/id_ed25519 2>/dev/null || echo "SSH key already added or no passphrase required"
+fi
+
 # 各サブモジュールをmainブランチに切り替え
 echo "🔄 Switching submodules to main branch..."
-git submodule foreach 'git checkout main && git pull origin main'
+git submodule foreach '
+    echo "Processing submodule: $name"
+
+    # リモートブランチ情報を取得
+    git fetch origin --quiet || { echo "Failed to fetch $name"; exit 1; }
+
+    # mainブランチが存在するかチェック
+    if git show-ref --verify --quiet refs/remotes/origin/main; then
+        echo "Switching to main branch in $name"
+        git checkout main || { echo "Failed to checkout main in $name"; exit 1; }
+        git pull origin main || { echo "Failed to pull main in $name"; exit 1; }
+    elif git show-ref --verify --quiet refs/remotes/origin/master; then
+        echo "main branch not found, switching to master branch in $name"
+        git checkout master || { echo "Failed to checkout master in $name"; exit 1; }
+        git pull origin master || { echo "Failed to pull master in $name"; exit 1; }
+    else
+        echo "Warning: Neither main nor master branch found in $name"
+        exit 1
+    fi
+'
 
 # フロントエンドの依存関係をインストール
 echo "📚 Installing frontend dependencies..."
@@ -52,8 +77,10 @@ echo "🔄 Running database migrations..."
 docker compose exec auth-api go run migrate/migrate.go
 
 # セットアップ完了
-echo "✨ Setup completed successfully!"
 echo "
+====================================
+✨ Setup completed successfully! ✨
+====================================
 🌐 Available services:
     - Frontend: http://localhost:3000
     - AdminFrontend: http://localhost:3001
